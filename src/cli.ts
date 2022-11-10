@@ -1,11 +1,10 @@
-import { terminal as term } from "terminal-kit";
-term("Hello World!\n");
-term.red("red\n");
-term.bold("bold\n");
-term.bold.underline.red("mixed\n");
+// term("Hello World!\n");
+// term.red("red\n");
+// term.bold("bold\n");
+// term.bold.underline.red("mixed\n");
 
-term.green("My name is %s, I'm %d.\n", "hsx", 27);
-term("The terminal size is %d * %d\n", term.width, term.height);
+// term.green("My name is %s, I'm %d.\n", "hsx", 27);
+// term("The terminal size is %d * %d\n", term.width, term.height);
 
 // term.magenta("Enter your name: ");
 // term.inputField(function (error, input) {
@@ -16,10 +15,10 @@ term("The terminal size is %d * %d\n", term.width, term.height);
 // term.moveTo(1, 1);
 // term.moveTo(1, 1, "Upper-left corner.\n");
 // term.moveTo.cyan(1, 1, "My name is %s, I'm %d.\n", "Jack", 32);
-term.spinner("impulse");
+// term.spinner("impulse");
 // term.spinner("lineSpinner");
 
-///////
+///////////
 // const { program } = require("commander");
 
 // program.option("--first").option("-s, --separator <char>").option("--123");
@@ -52,3 +51,42 @@ term.spinner("impulse");
 // 	});
 
 // program.parse();
+import { Console, T } from "@car_han/utils";
+import { program } from "commander";
+import pkgInfo from "../package.json";
+import { terminal as term } from "terminal-kit";
+
+type t_cli_args = {
+	debug?: boolean;
+};
+class CLI {
+	static options: t_cli_args;
+	static init() {
+		this.cmdRegiste();
+		this.cmdParse();
+		this.handleInput();
+	}
+	static cmdRegiste() {
+		program
+			.name("thx-cli")
+			.description(pkgInfo.description)
+			.version(pkgInfo.version);
+
+		program
+			.option("-d | --debug", "show input info")
+			.option("-i | --input <value>");
+	}
+	static cmdParse() {
+		program.parse();
+		this.options = program.opts();
+	}
+	static handleInput() {
+		if (T.isValidObj(this.options)) {
+			if (this.options.debug) {
+				console.log(this.options);
+			}
+		}
+	}
+}
+
+CLI.init();

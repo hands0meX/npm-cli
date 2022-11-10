@@ -1,7 +1,7 @@
 {
-	"name": "npm-node",
+	"name": "@car_han/cli",
 	"version": "1.0.0",
-	"description": "npm-node -tpl",
+	"description": "CLI to handle some os things quickly.",
 	"main": "lib/src/index.js",
 	"scripts": {
 		"debug": "ts-node src/cli.ts",
@@ -15,7 +15,8 @@
 	},
 	"keywords": [
 		"typescript",
-		"npm"
+		"npm",
+		"cli"
 	],
 	"author": "",
 	"license": "ISC",
@@ -40,6 +41,7 @@
 		"thx": "lib/src/cli.js"
 	},
 	"dependencies": {
+		"@car_han/utils": "^1.0.9",
 		"commander": "^9.4.1",
 		"terminal-kit": "^3.0.0"
 	}

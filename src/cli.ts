@@ -17,70 +17,63 @@
 // term.moveTo.cyan(1, 1, "My name is %s, I'm %d.\n", "Jack", 32);
 // term.spinner("impulse");
 // term.spinner("lineSpinner");
-
-///////////
-// const { program } = require("commander");
-
-// program.option("--first").option("-s, --separator <char>").option("--123");
-
-// program.parse();
-
-// const options = program.opts();
-// console.log(options, "options", program.args[0]);
-// console.log(program, "program");
-// const limit = options.first ? 1 : undefined;
-// console.log(program.args[0].split(options.separator, limit));
-
-// const { Command } = require("commander");
-// const program = new Command();
-
-// program
-// 	.name("string-util")
-// 	.description("CLI to some JavaScript string utilities")
-// 	.version("0.8.0");
-
-// program
-// 	.command("split")
-// 	.description("Split a string into substrings and display as an array")
-// 	.argument("<string>", "string to split")
-// 	.option("--first", "display just the first substring")
-// 	.option("-s, --separator <char>", "separator character", ",")
-// 	.action((str, options) => {
-// 		const limit = options.first ? 1 : undefined;
-// 		console.log(str.split(options.separator, limit));
-// 	});
-
-// program.parse();
 import { Console, T } from "@car_han/utils";
 import { program } from "commander";
 import pkgInfo from "../package.json";
 import { terminal as term } from "terminal-kit";
+import { build } from "./build";
 
 type t_cli_args = {
 	debug?: boolean;
 };
 class CLI {
 	static options: t_cli_args;
+	static program: any;
+
+	get program() {
+		return this.program;
+	}
 	static init() {
+		this.program = program;
+
 		this.cmdRegiste();
+		this.subCmdRegiste();
 		this.cmdParse();
-		this.handleInput();
+		this.handleInputOption();
 	}
 	static cmdRegiste() {
-		program
+		this.program
 			.name("thx-cli")
 			.description(pkgInfo.description)
 			.version(pkgInfo.version);
 
-		program
-			.option("-d | --debug", "show input info")
-			.option("-i | --input <value>");
+		this.program
+			.option("-d, --debug", "show input info")
+			.option("-i, --input <value>", "input val", "default");
+
+		this.program.addHelpText(
+			"beforeAll",
+			`😊😊😊😊😊😊😊😊😊😊😊😊😊 test 😊😊😊😊😊😊😊😊😊😊😊😊😊`
+		);
+		this.program.addHelpText(
+			"afterAll",
+			`😊😊😊😊😊😊😊😊😊😊😊😊😊 test 😊😊😊😊😊😊😊😊😊😊😊😊😊`
+		);
+	}
+	static subCmdRegiste() {
+		this.program
+			.command("build <params>")
+			.description("build fs and so on.")
+			.option("-t, --test", "test cmd desc")
+			.action(params => {
+				build();
+			});
 	}
 	static cmdParse() {
-		program.parse();
-		this.options = program.opts();
+		this.program.parse();
+		this.options = this.program.opts();
 	}
-	static handleInput() {
+	static handleInputOption() {
 		if (T.isValidObj(this.options)) {
 			if (this.options.debug) {
 				console.log(this.options);

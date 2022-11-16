@@ -118,6 +118,7 @@ export class FSManager {
 		term.yesOrNo({ yes: ["y", "ENTER"], no: ["n"] }, (error, result) => {
 			if (result) {
 				this.genFile(astNode);
+				term.clear();
 				term.green("\n gen success!!\n");
 			}
 			process.exit(0);

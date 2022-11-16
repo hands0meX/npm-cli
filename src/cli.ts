@@ -1,22 +1,4 @@
-// term("Hello World!\n");
-// term.red("red\n");
-// term.bold("bold\n");
-// term.bold.underline.red("mixed\n");
-
-// term.green("My name is %s, I'm %d.\n", "hsx", 27);
-// term("The terminal size is %d * %d\n", term.width, term.height);
-
-// term.magenta("Enter your name: ");
-// term.inputField(function (error, input) {
-// 	term.green("\nYour name is '%s'\n", input);
-// 	process.exit(0);
-// });
-
-// term.moveTo(1, 1);
-// term.moveTo(1, 1, "Upper-left corner.\n");
-// term.moveTo.cyan(1, 1, "My name is %s, I'm %d.\n", "Jack", 32);
-// term.spinner("impulse");
-// term.spinner("lineSpinner");
+#!/usr/bin/env node
 import { Console, T } from "@car_han/utils";
 import { program } from "commander";
 import pkgInfo from "../package.json";
@@ -62,7 +44,7 @@ class CLI {
 	}
 	static subCmdRegiste() {
 		this.program
-			.command("build <params>")
+			.command("build")
 			.description("build fs and so on.")
 			.option("-t, --test", "test cmd desc")
 			.action(params => {

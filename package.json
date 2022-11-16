@@ -6,7 +6,7 @@
 	"scripts": {
 		"debug": "ts-node src/cli.ts",
 		"patch": "npm version patch",
-		"upload": "tsc && npm publish",
+		"upload": "npm publish",
 		"build": "tsc"
 	},
 	"repository": {

@@ -29,7 +29,6 @@ export class FSManager {
 				this.ask2Exit();
 			}
 			const astData = this.compile2AST(input);
-			console.log(astData);
 			this.ask2GenFile(astData);
 		});
 
@@ -57,7 +56,7 @@ export class FSManager {
 		// );
 	}
 
-	// "F#foo>js#test+(F#bar>ts#test)"
+	// "F#foo>ts#test+(F#bar>ts#test)"
 	static compile2AST(input: string) {
 		const toASTNode = (type: string, name: string): ASTNode => {
 			return {
@@ -65,25 +64,72 @@ export class FSManager {
 				name,
 			};
 		};
-
-		let flattenArray = input
-			.split(MOD.CHAIN)
-			.map(i => i.split(MOD.NAME))
-			// .map(i => i.split(MOD.BRO))
-			.map(([type, name]) => toASTNode(type, name));
-
-		const ASTData = flattenArray.reduceRight((sub, sup) => {
-			if (!T.isValidStr(sub.name) || !T.isValidStr(sup.name)) {
-				throw new Error("Please use '#' to enter the name of the file");
-			}
-			if (sup.type !== FILE_TYPE.FOLDER && T.isValidStr(sub.name)) {
-				throw new Error("Cannot have a file type as a parent node");
-			}
-
-			sup.children = [sub];
-			return sup;
+		const reg_sub_folder = /\(.+?\)/g;
+		const subInputArr = input.match(reg_sub_folder);
+		if (T.isValidArray(subInputArr)) {
+			subInputArr.forEach(subInput => {
+				input = input.replace(subInput, "[thxFlag]");
+			});
+		}
+		const flattenArray = input.split(MOD.CHAIN).map(stage => {
+			return stage.split(MOD.BRO);
 		});
-		return ASTData;
+		if (!T.isValidArray(flattenArray)) {
+			throw new Error("empty input!!!");
+		}
+		const [parentInput, childrenInput] = flattenArray;
+		if (!T.isValidArray(parentInput) || parentInput.length > 1) {
+			throw new Error("Please check if there is only one parent node");
+		}
+		const isSubInput = test => {
+			return test === "[thxFlag]";
+		};
+		const isValidGenFile = test => {
+			return test.includes("#");
+		};
+		const [type, name] = parentInput[0].split(MOD.NAME);
+		let astNode = toASTNode(type, name);
+
+		if (T.isValidArray(childrenInput)) {
+			const children = childrenInput
+				.filter(childStr => !isSubInput(childStr))
+				.map(childStr => {
+					if (!isValidGenFile(childStr)) {
+						throw new Error(
+							"Please check whether the child node format is written correctly"
+						);
+					}
+					const [type, name] = childStr.split(MOD.NAME);
+					return toASTNode(type, name);
+				});
+			if (T.isValidArray(subInputArr)) {
+				subInputArr.forEach(subInput => {
+					subInput = subInput.slice(1, subInput.length - 1);
+					children.push(this.compile2AST(subInput));
+				});
+			}
+			astNode.children = children;
+		}
+		return astNode;
+		// console.log(astNode);
+		// let flattenArray = input
+		// 	.split(MOD.CHAIN)
+		// 	.map(i => i.split(MOD.NAME))
+		// 	// .map(i => i.split(MOD.BRO))
+		// 	.map(([type, name]) => toASTNode(type, name));
+
+		// const ASTData = flattenArray.reduceRight((sub, sup) => {
+		// 	if (!T.isValidStr(sub.name) || !T.isValidStr(sup.name)) {
+		// 		throw new Error("Please use '#' to enter the name of the file");
+		// 	}
+		// 	if (sup.type !== FILE_TYPE.FOLDER && T.isValidStr(sub.name)) {
+		// 		throw new Error("Cannot have a file type as a parent node");
+		// 	}
+
+		// 	sup.children = [sub];
+		// 	return sup;
+		// });
+		// return ASTData;
 	}
 
 	static ask2GenFile(astNode: ASTNode) {
@@ -186,3 +232,5 @@ export class FSManager {
 // 		{ type: "ts", name: "test" },
 // 	],
 // });
+
+// FSManager.compile2AST("F#foo>ts#test+(F#bar>ts#test)+(F#aaa>ts#test)");

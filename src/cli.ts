@@ -29,9 +29,9 @@ class CLI {
 			.description(pkgInfo.description)
 			.version(pkgInfo.version);
 
-		this.program
-			.option("-d, --debug", "show input info")
-			.option("-i, --input <value>", "input val", "default");
+		// this.program
+		// .option("-d, --debug", "show input info")
+		// .option("-i, --input <value>", "input val", "default");
 
 		this.program.addHelpText(
 			"beforeAll",

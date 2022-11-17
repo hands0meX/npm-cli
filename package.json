@@ -1,6 +1,6 @@
 {
 	"name": "@car_han/cli",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "CLI to handle some os things quickly.",
 	"main": "lib/src/index.js",
 	"scripts": {

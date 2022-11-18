@@ -88,6 +88,12 @@ export class FSManager {
 			return test.includes("#");
 		};
 		const [type, name] = parentInput[0].split(MOD.NAME);
+
+		if (type !== "F" && T.isValidArray(childrenInput)) {
+			throw new Error(
+				"parent node should be a 'F' type if you have child node."
+			);
+		}
 		let astNode = toASTNode(type, name);
 
 		if (T.isValidArray(childrenInput)) {
@@ -165,7 +171,7 @@ export class FSManager {
 			if (result) {
 				this.genFile(astNode);
 				term.clear();
-				term.green("\n gen success!!\n");
+				term.green("\n Gen success!!\n");
 			}
 			process.exit(0);
 		});
@@ -232,5 +238,5 @@ export class FSManager {
 // 		{ type: "ts", name: "test" },
 // 	],
 // });
-
+// FSManager.compile2AST("F#test>B#ccc");
 // FSManager.compile2AST("F#foo>ts#test+(F#bar>ts#test)+(F#aaa>ts#test)");

@@ -22,17 +22,20 @@ Commands:
 ```
 #### build
 ##### fs (file system)
-```shell
-> Enter file system by emmet: F#foo>ts#test+(F#bar>ts#test)+(F#aaa>ts#test)
-```
-```
-|--foo/
-  |--test.ts
-  |--bar/
+###### Usage
+- thx build --fs "F#foo>ts#test+(F#bar>ts#test)"
+- thx build
+  ```shell
+  > Enter file system by emmet: F#foo>ts#test+(F#bar>ts#test)+(F#aaa>ts#test)
+  ```
+  ```
+  |--foo/
     |--test.ts
-  |--aaa/
-    |--test.ts
-```
+    |--bar/
+      |--test.ts
+    |--aaa/
+      |--test.ts
+  ```
  have to be aware of is: 
 - use "#" to set the name of your file|folder
 - use ">" to set your sub file|folder

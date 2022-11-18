@@ -4,6 +4,7 @@ import { program } from "commander";
 import pkgInfo from "../package.json";
 import { terminal as term } from "terminal-kit";
 import { build } from "./build";
+import { FSManager } from "./build/buildfs";
 
 type t_cli_args = {
 	debug?: boolean;
@@ -15,8 +16,12 @@ class CLI {
 	get program() {
 		return this.program;
 	}
-	static init() {
+	static async init() {
 		this.program = program;
+		this.program
+			.name("thx-cli")
+			.description(pkgInfo.description)
+			.version(pkgInfo.version);
 
 		this.cmdRegiste();
 		this.subCmdRegiste();
@@ -24,43 +29,36 @@ class CLI {
 		this.handleInputOption();
 	}
 	static cmdRegiste() {
-		this.program
-			.name("thx-cli")
-			.description(pkgInfo.description)
-			.version(pkgInfo.version);
-
-		// this.program
-		// .option("-d, --debug", "show input info")
-		// .option("-i, --input <value>", "input val", "default");
-
-		this.program.addHelpText(
-			"beforeAll",
-			`😊😊😊😊😊😊😊😊😊😊😊😊😊 test 😊😊😊😊😊😊😊😊😊😊😊😊😊`
-		);
-		this.program.addHelpText(
-			"afterAll",
-			`😊😊😊😊😊😊😊😊😊😊😊😊😊 test 😊😊😊😊😊😊😊😊😊😊😊😊😊`
-		);
+		this.program.enablePositionalOptions().option("-d, --debug");
 	}
 	static subCmdRegiste() {
 		this.program
 			.command("build")
 			.description("build fs and so on.")
-			.option("-t, --test", "test cmd desc")
+			.option("-f, --fs <emmetInput>", "test cmd desc")
 			.action(params => {
-				build();
+				if (T.isValidStr(params.fs)) {
+					const astData = FSManager.compile2AST(params.fs);
+					FSManager.ask2GenFile(astData);
+				} else {
+					build();
+				}
 			});
 	}
 	static cmdParse() {
-		this.program.parse();
-		this.options = this.program.opts();
+		try {
+			this.program.parse();
+			this.options = this.program.opts();
+		} catch (error) {
+			console.log("parse error!");
+		}
 	}
 	static handleInputOption() {
-		if (T.isValidObj(this.options)) {
-			if (this.options.debug) {
-				console.log(this.options);
-			}
-		}
+		// if (T.isValidObj(this.options)) {
+		// 	if (this.options.debug) {
+		// 		console.log(this.options);
+		// 	}
+		// }
 	}
 }
 

@@ -1,12 +1,14 @@
 ### CLI
-[build  🔨](#build)
-+ [fs 📃](#fs)
 
+[build 🔨](#build)
+
+-   [fs 📃](#fs)
 
 **Install**
 npm i -g @car_han/cli
 
 **🚀launch**
+
 ```js
 Usage: thx-cli [options] [command]
 
@@ -20,23 +22,29 @@ Commands:
   build [options]      build fs and so on.
   help [command]       display help for command
 ```
+
 #### build
+
 ##### fs (file system)
+
 ###### Usage
-- thx build --fs "F#foo>ts#test+(F#bar>ts#test)"
-- thx build
-  ```shell
-  > Enter file system by emmet: F#foo>ts#test+(F#bar>ts#test)+(F#aaa>ts#test)
-  ```
-  ```
-  |--foo/
-    |--test.ts
-    |--bar/
+
+-   thx build --fs "F#foo>ts#test+(F#bar>ts#test) in ./"
+-   thx build
+    ```shell
+    > Enter file system by emmet: F#foo>ts#test+(F#bar>ts#test)+(F#aaa>ts#test) in ./
+    ```
+    ```
+    |--foo/
       |--test.ts
-    |--aaa/
-      |--test.ts
-  ```
- have to be aware of is: 
-- use "#" to set the name of your file|folder
-- use ">" to set your sub file|folder
-***Not finished yet, stay tuned.***
+      |--bar/
+        |--test.ts
+      |--aaa/
+        |--test.ts
+    ```
+    have to be aware of is:
+-   use "#" to set the name of your file|folder
+-   use ">" to set your sub file|folder
+-   use "in" to set gen target root path, default is "./"
+
+**_Not finished yet, stay tuned._**

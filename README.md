@@ -28,7 +28,7 @@ Commands:
 ##### fs (file system)
 
 ###### Usage
-
+1. **build**
 -   thx build --fs "F#foo>ts#test+(F#bar>ts#test) in ./"
 -   thx build
     ```shell
@@ -47,4 +47,14 @@ Commands:
 -   use ">" to set your sub file|folder
 -   use "in" to set gen target root path, default is "./"
 
+2. **parse**
+- Parse the target folder
+```shell
+thx build --fsp ./foo
+```
+```js
+return F#foo>(F#aaa>ts#test)+(F#bar>ts#test)+ts#test
+```
+
+ 
 **_Not finished yet, stay tuned._**

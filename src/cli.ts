@@ -33,23 +33,33 @@ class CLI {
     }
     static subCmdRegiste() {
         this.program
-            .command("build")
-            .description("build fs and so on.")
-            .option("--fs <emmetInput>", "test cmd desc")
-            .action((params) => {
-                if (T.isValidStr(params.fs)) {
-                    FSManager.gen(params.fs);
-                } else {
-                    build();
-                }
-            });
+					.command("build")
+					.description("build fs and so on.")
+					.option(
+						"--fs <emmetInput>",
+						"build your target directory by command."
+					)
+					.option(
+						"--fsp <targetPath>",
+						"input your target path to parse as a string"
+					)
+					.action(params => {
+						if (T.isValidStr(params.fs)) {
+							FSManager.gen(params.fs);
+						} else if (T.isValidStr(params.fsp)) {
+							const parsedDirString = FSManager.compile2ASTByDir(params.fsp);
+							term.green(parsedDirString + "\n");
+						} else {
+							build();
+						}
+					});
     }
     static cmdParse() {
         try {
             this.program.parse();
             this.options = this.program.opts();
         } catch (error) {
-            console.log("parse error!");
+            console.log("parse error!", error);
         }
     }
     static handleInputOption() {

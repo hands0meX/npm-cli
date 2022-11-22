@@ -74,7 +74,7 @@ export class FSManager {
 	//     );
 	// }
 
-	// "F#foo>ts#test+(F#bar>ts#test) in ./"
+	// F#hh.testa>(F#hhh>(F#aaa>c#dd+json#ee)+F#bbb+ts#hh+vue#p)+(F#test>json#hh)+json#w
 	static compile2ASTByString(input: string) {
 		const toASTNode = (type: string, name: string): ASTNode => {
 			return {
@@ -82,13 +82,23 @@ export class FSManager {
 				name,
 			};
 		};
-		const reg_sub_folder = /\(.+?\)/g;
-		const subInputArr = input.match(reg_sub_folder);
-		if (T.isValidArray(subInputArr)) {
-			subInputArr.forEach(subInput => {
-				input = input.replace(subInput, "[thxFlag]");
-			});
+
+		let count = 0;
+		let subInputArr = [];
+		let n = input.length;
+		for (let i = 0; i < n; ++i) {
+			const char = input[i];
+			if (char === "(") {
+				if (count++ === 0) subInputArr.push([i]);
+			} else if (char === ")") {
+				if (--count === 0) subInputArr[subInputArr.length - 1].push(i);
+			}
 		}
+		subInputArr = subInputArr.map(([s, e]) => input.substring(s, e + 1));
+		subInputArr.forEach(i => {
+			input = input.replace(i, "[thxFlag]");
+		});
+
 		const flattenArray = input.split(MOD.CHAIN).map(stage => {
 			return stage.split(MOD.BRO);
 		});

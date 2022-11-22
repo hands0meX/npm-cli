@@ -1,6 +1,6 @@
 {
     "name": "@car_han/cli",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "CLI to handle some os things quickly.",
     "main": "lib/src/index.js",
     "scripts": {
@@ -18,7 +18,7 @@
         "npm",
         "cli"
     ],
-    "author": "",
+    "author": "hands0meX",
     "license": "ISC",
     "devDependencies": {
         "@types/node": "^17.0.21",
@@ -28,9 +28,9 @@
     },
     "types": "./lib/src/index.d.ts",
     "bugs": {
-        "url": "https://github.com/hands0meX/template/issues"
+        "url": "https://github.com/hands0meX/npm-cli/issues"
     },
-    "homepage": "https://github.com/hands0meX/template#readme",
+    "homepage": "https://github.com/hands0meX/npm-cli#readme",
     "directories": {
         "example": "examples"
     },

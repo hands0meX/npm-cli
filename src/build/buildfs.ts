@@ -4,6 +4,15 @@ import fs from "fs";
 import path from "path";
 import { terminal as term } from "terminal-kit";
 
+let pkgInfo = null;
+try {
+	pkgInfo = JSON.parse(
+		fs.readFileSync(path.resolve("./", "thx.json"), "utf-8")
+	);
+} catch (error) {
+	term.yellow("you can set 'thx.json' in the root path.\n");
+}
+
 const MOD = {
 	NAME: "#",
 	MUTI: "*",
@@ -48,7 +57,7 @@ export class FSManager {
 		return input;
 	}
 
-	// static setRootAt() {
+	// static autoCompleterFn() {
 	//     var autoCompleter = function autoCompleter(inputString, callback) {
 	//         fs.readdir(__dirname, function (error, files) {
 	//             callback(
@@ -147,15 +156,27 @@ export class FSManager {
 		return astNode;
 	}
 
-	static compile2ASTByDir(targetPath: string): string {
-		let res = this.compile2ASTByDirectory(targetPath);
-		return res.slice(1, res.length - 1);
+	static parseTargerDir2Emmet(targetPath: string): string {
+		let res = this.handleParseTargerDir2Emmet(targetPath);
+		if (T.isValidStr(res)) {
+			return res.slice(1, res.length - 1);
+		} else {
+			return "unexpect parse.";
+		}
 	}
 
 	/**
 	 * 将目录转成字符串写法
 	 */
-	static compile2ASTByDirectory(targetPath: string): string {
+	static handleParseTargerDir2Emmet(targetPath: string): string {
+		if (T.isValidObj(pkgInfo)) {
+			if (
+				T.isValidArray(pkgInfo?.exclude) &&
+				pkgInfo.exclude.includes(targetPath)
+			) {
+				return;
+			}
+		}
 		const parse2Emmet = (path, isDir = true) => {
 			const slices = path.split("/");
 			let fileName = slices[slices.length - 1];
@@ -179,7 +200,7 @@ export class FSManager {
 				if (T.isValidArray(res)) {
 					res.forEach(item => {
 						const dir = targetPath + "/";
-						blockStr += "+" + this.compile2ASTByDirectory(dir + item);
+						blockStr += "+" + this.handleParseTargerDir2Emmet(dir + item);
 					});
 					blockStr = blockStr.slice(1);
 					return `(${parse2Emmet(targetPath)}>${blockStr})`;
@@ -203,7 +224,7 @@ export class FSManager {
 			}
 		}
 		const filePre =
-			String(new Array(level).fill("  ")).replace(",", "") + "|--";
+			String(new Array(level).fill("  ")).replace(/,/g, "") + "|--";
 		const fileName = filePre + astNode.name + fileTail + "\n";
 		str += fileName;
 		if (!T.isValidArray(astNode.children)) return str;

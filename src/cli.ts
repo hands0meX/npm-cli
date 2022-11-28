@@ -47,7 +47,9 @@ class CLI {
 						if (T.isValidStr(params.fs)) {
 							FSManager.gen(params.fs);
 						} else if (T.isValidStr(params.fsp)) {
-							const parsedDirString = FSManager.compile2ASTByDir(params.fsp);
+							const parsedDirString = FSManager.parseTargerDir2Emmet(
+								params.fsp
+							);
 							term.green(parsedDirString + "\n");
 						} else {
 							build();
